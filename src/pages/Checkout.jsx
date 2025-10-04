@@ -67,17 +67,17 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <p className="text-gray-600 mt-2">Complete your purchase</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Checkout</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">Complete your purchase</p>
         </div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2 space-y-8">
             {/* Customer Information */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Customer Information</h2>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Customer Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -125,8 +125,8 @@ const Checkout = () => {
             </div>
 
             {/* Delivery Information */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Delivery Address</h2>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Delivery Address</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -200,8 +200,8 @@ const Checkout = () => {
             </div>
 
             {/* Payment Method */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Payment Method</h2>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Payment Method</h2>
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
@@ -222,27 +222,47 @@ const Checkout = () => {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-24">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Order Summary</h2>
               
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
-                  <div key={item.productId} className="flex items-center space-x-3">
+                  <div key={item.productId} className="flex items-center space-x-2 sm:space-x-3">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-12 h-12 object-cover rounded-lg"
+                      className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg"
                     />
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900 truncate">
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                         {item.name}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                         Qty: {item.quantity}
                       </p>
+                      {/* Selected Options */}
+                      {(item.selectedColor || item.selectedSize || item.selectedMaterial) && (
+                        <div className="mt-1 space-y-1">
+                          {item.selectedColor && (
+                            <p className="text-xs text-gray-500">
+                              <span className="font-medium">Color:</span> {item.selectedColor}
+                            </p>
+                          )}
+                          {item.selectedSize && (
+                            <p className="text-xs text-gray-500">
+                              <span className="font-medium">Size:</span> {item.selectedSize}
+                            </p>
+                          )}
+                          {item.selectedMaterial && (
+                            <p className="text-xs text-gray-500">
+                              <span className="font-medium">Material:</span> {item.selectedMaterial}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span className="text-xs sm:text-sm font-semibold text-gray-900">
                       PKR {(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>

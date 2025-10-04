@@ -9,6 +9,8 @@ const ItemDetail = () => {
   const navigate = useNavigate();
   const { guestId, cartItems } = useContext(CartContext);
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedMaterial, setSelectedMaterial] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showMagnifier, setShowMagnifier] = useState(false);
@@ -73,7 +75,10 @@ const ItemDetail = () => {
       await addToCart({ 
         guestId, 
         productId: item._id, 
-        quantity: quantity 
+        quantity: quantity,
+        selectedColor,
+        selectedSize,
+        selectedMaterial
       }).unwrap();
       console.log('✅ Added to cart:', item.name);
     } catch (error) {
@@ -117,7 +122,7 @@ const ItemDetail = () => {
     setShowMagnifier(false);
   };
 
-  const images = item.detailImages || [item.image];
+  const images = item.images || [];
 
   // Fixed magnifier style calculation with HD image support
   const getMagnifierStyle = () => {
@@ -130,9 +135,8 @@ const ItemDetail = () => {
     const imageWidth = rect.width;
     const imageHeight = rect.height;
     
-    // Get the high-resolution version of the image if available
+    // Get the current image
     const currentImage = images[selectedImageIndex];
-    const hdImage = item.hdImages ? item.hdImages[selectedImageIndex] : currentImage;
     
     // Calculate the background position
     const backgroundX = -(magnifierPosition.x * zoomFactor - magnifierSize / 2);
@@ -141,7 +145,7 @@ const ItemDetail = () => {
     return {
       width: `${magnifierSize}px`,
       height: `${magnifierSize}px`,
-      backgroundImage: `url(${hdImage})`,
+      backgroundImage: `url(${currentImage})`,
       backgroundSize: `${imageWidth * zoomFactor}px ${imageHeight * zoomFactor}px`,
       backgroundPosition: `${backgroundX}px ${backgroundY}px`,
       backgroundRepeat: 'no-repeat',
@@ -270,34 +274,18 @@ const ItemDetail = () => {
                 <span className="text-sm font-medium text-primary-600 uppercase tracking-wide">
                   {item.category}
                 </span>
-                <h1 className="text-3xl font-bold text-gray-900 mt-2 mb-4">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mt-2 mb-4">
                   {item.name}
                 </h1>
-                <div className="flex items-center mb-4">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <span
-                        key={i}
-                        className={`text-lg ${
-                          i < Math.floor(item.rating) ? 'text-yellow-400' : 'text-gray-300'
-                        }`}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                  <span className="text-gray-600 ml-2">{item.rating}</span>
-                  <span className="text-gray-400 ml-1">({item.reviews} reviews)</span>
-                </div>
-                <p className="text-2xl font-bold text-primary-600 mb-6">
-                  ${item.price.toFixed(2)}
+                <p className="text-xl sm:text-2xl font-bold text-primary-600 mb-6">
+                  PKR {item.price.toFixed(2)}
                 </p>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Description</h3>
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                     {item.description}
                   </p>
                 </div>
@@ -305,7 +293,7 @@ const ItemDetail = () => {
                 {/* Color Selection */}
                 {item.colors && item.colors.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Color</h3>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Color</h3>
                     <div className="flex flex-wrap gap-3">
                       {item.colors.map((color) => (
                         <button
@@ -324,9 +312,50 @@ const ItemDetail = () => {
                   </div>
                 )}
 
+                {/* Size Selection */}
+                {item.sizes && item.sizes.length > 0 && (
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Size</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {item.sizes.map((size) => (
+                        <button
+                          key={size}
+                          onClick={() => setSelectedSize(size)}
+                          className={`px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
+                            selectedSize === size
+                              ? 'border-primary-500 bg-primary-50 text-primary-700'
+                              : 'border-gray-300 hover:border-primary-300'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Material Selection */}
+                {item.material && (
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Material</h3>
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        onClick={() => setSelectedMaterial(item.material)}
+                        className={`px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
+                          selectedMaterial === item.material
+                            ? 'border-primary-500 bg-primary-50 text-primary-700'
+                            : 'border-gray-300 hover:border-primary-300'
+                        }`}
+                      >
+                        {item.material}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Quantity Selection */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Quantity</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Quantity</h3>
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -349,16 +378,22 @@ const ItemDetail = () => {
                 </div>
 
                 {/* Product Specifications */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Material</h4>
-                    <p className="text-gray-600">{item.material}</p>
+                {(item.material || item.dimensions) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {item.material && (
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Material</h4>
+                        <p className="text-gray-600">{item.material}</p>
+                      </div>
+                    )}
+                    {item.dimensions && (
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Dimensions</h4>
+                        <p className="text-gray-600">{item.dimensions}</p>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Dimensions</h4>
-                    <p className="text-gray-600">{item.dimensions}</p>
-                  </div>
-                </div>
+                )}
 
                 {/* Add to Cart Button */}
                 <div className="pt-6">
@@ -366,16 +401,29 @@ const ItemDetail = () => {
                     const inCart = isProductInCart(item._id);
                     const isOutOfStock = !item.inStock || item.stockQuantity <= 0;
                     
+                    // Check if required options are selected
+                    const hasColors = item.colors && item.colors.length > 0;
+                    const hasSizes = item.sizes && item.sizes.length > 0;
+                    const hasMaterial = item.material;
+                    
+                    const colorSelected = !hasColors || selectedColor;
+                    const sizeSelected = !hasSizes || selectedSize;
+                    const materialSelected = !hasMaterial || selectedMaterial;
+                    
+                    const canAddToCart = colorSelected && sizeSelected && materialSelected;
+                    
                     return (
                       <button
                         onClick={inCart ? handleRemoveFromCart : handleAddToCart}
-                        disabled={isOutOfStock || isLoading}
+                        disabled={isOutOfStock || isLoading || (!inCart && !canAddToCart)}
                         className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ${
                           isOutOfStock
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : inCart
                             ? 'bg-red-500 hover:bg-red-600 text-white'
-                            : 'bg-primary-500 hover:bg-primary-600 text-white'
+                            : canAddToCart
+                            ? 'bg-primary-500 hover:bg-primary-600 text-white'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         {isLoading ? (
@@ -390,6 +438,8 @@ const ItemDetail = () => {
                           '🚫 Out of Stock'
                         ) : inCart ? (
                           '❌ Remove from Cart'
+                        ) : !canAddToCart ? (
+                          '⚠️ Please select options'
                         ) : (
                           '🛒 Add to Cart'
                         )}

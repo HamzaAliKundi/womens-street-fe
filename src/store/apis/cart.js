@@ -17,10 +17,16 @@ export const cartApi = createApi({
     
     // Add item to cart
     addToCart: builder.mutation({
-      query: ({ guestId, productId, quantity = 1 }) => ({
+      query: ({ guestId, productId, quantity = 1, selectedColor, selectedSize, selectedMaterial }) => ({
         url: `/${guestId}/add`,
         method: 'POST',
-        body: { productId, quantity },
+        body: { 
+          productId, 
+          quantity, 
+          selectedColor, 
+          selectedSize, 
+          selectedMaterial 
+        },
       }),
       invalidatesTags: ['Cart'],
     }),

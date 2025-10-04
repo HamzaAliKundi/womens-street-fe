@@ -15,7 +15,7 @@ const ItemCard = ({ item, index }) => {
       className="card overflow-hidden group animate-fade-in"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <Link to={`/item/${item.id}`} className="block">
+      <Link to={`/item/${item._id}`} className="block">
         <div className="relative overflow-hidden">
           {/* Main Image */}
           <img
@@ -76,7 +76,7 @@ const ItemCard = ({ item, index }) => {
 
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-primary-600">
-              ${item.price.toFixed(2)}
+              PKR {item.price.toFixed(2)}
             </span>
             <span className={`text-sm px-2 py-1 rounded-full ${
               item.inStock 

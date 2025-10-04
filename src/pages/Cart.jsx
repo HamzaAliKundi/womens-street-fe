@@ -97,11 +97,11 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Shopping Cart</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
             You have {cartCount} item{cartCount !== 1 ? 's' : ''} in your cart
             {cartQuantity !== cartCount && (
-              <span className="text-sm text-gray-500 ml-1">
+              <span className="text-xs sm:text-sm text-gray-500 ml-1">
                 ({cartQuantity} total quantity)
               </span>
             )}
@@ -112,23 +112,43 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900">Cart Items</h2>
+              <div className="p-4 sm:p-6 border-b border-gray-200">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Cart Items</h2>
               </div>
               <div className="divide-y divide-gray-200">
                 {cartItems.map((item) => (
-                  <div key={item.productId} className="p-6">
-                    <div className="flex items-center space-x-4">
+                  <div key={item.productId} className="p-4 sm:p-6">
+                    <div className="flex items-center space-x-3 sm:space-x-4">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-20 h-20 object-cover rounded-lg"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 truncate">
                           {item.name}
                         </h3>
-                        <p className="text-lg font-bold text-primary-600 mt-2">
+                        {/* Selected Options */}
+                        {(item.selectedColor || item.selectedSize || item.selectedMaterial) && (
+                          <div className="mt-2 space-y-1">
+                            {item.selectedColor && (
+                              <p className="text-sm text-gray-600">
+                                <span className="font-medium">Color:</span> {item.selectedColor}
+                              </p>
+                            )}
+                            {item.selectedSize && (
+                              <p className="text-sm text-gray-600">
+                                <span className="font-medium">Size:</span> {item.selectedSize}
+                              </p>
+                            )}
+                            {item.selectedMaterial && (
+                              <p className="text-sm text-gray-600">
+                                <span className="font-medium">Material:</span> {item.selectedMaterial}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                        <p className="text-sm sm:text-lg font-bold text-primary-600 mt-2">
                           PKR {item.price.toFixed(2)}
                         </p>
                       </div>
